@@ -10,10 +10,7 @@ Config location is ./config.dat
 Copies location is /copiesDir/data.txt
 Reading data from ./config.dat
 Writting data to ./copiesDir/data.txt
-<<<<<<< HEAD
 Config location is ./config.dat
 Copies location is /copiesDir/data.txt
 Reading data from ./config.dat
 Writting data to ./copiesDir/data.txt
-=======
->>>>>>> 88ce22817b09898af1913aa5dc8bf7d05b6dc1cc
