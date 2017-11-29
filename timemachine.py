@@ -172,4 +172,4 @@ def main():
 
 
 
-#execute2 = checkForChange()
+run=main()
