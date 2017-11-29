@@ -6,7 +6,11 @@ from logging.handlers import RotatingFileHandler
 
 
 parser = argparse.ArgumentParser(description="Create copies of specified files and watch for changes ")
+<<<<<<< HEAD
 parser.add_argument('-a' ,'--add', default='', action="store_true",
+=======
+parser.add_argument('-a' ,'--add',default=None,action="store_true",
+>>>>>>> 88ce22817b09898af1913aa5dc8bf7d05b6dc1cc
                     help='Add a file to the list of files to be observed')
 
 parser.add_argument('-r' , '--remove',default=None,action="store_true",
@@ -139,6 +143,7 @@ def list_all_files():
         sys.exit(1)
 
 #Add a file to config.dat
+<<<<<<< HEAD
 def add_file_to_config(filename):
     print('adding file to list of observable files')
     try:
@@ -149,6 +154,10 @@ def add_file_to_config(filename):
         print("Specified file {0} not found".format(filename), file=sys.stderr)
         sys.exit(1)
 
+=======
+def add_file_to_config():
+    print('adding file to list of observable files')
+>>>>>>> 88ce22817b09898af1913aa5dc8bf7d05b6dc1cc
 
 #Delete a file from config.dat
 def delete_file_from_config():
@@ -157,6 +166,7 @@ def delete_file_from_config():
 
 
 
+<<<<<<< HEAD
 def main():
     args =parser.parse_args() 
     if args.list:
@@ -167,6 +177,18 @@ def main():
         delete_file_from_config()
     else:
         execute = read_config_file()
+=======
+
+args =parser.parse_args() 
+if args.list:
+    list_all_files()
+elif args.add:
+    add_file_to_config()
+elif args.remove:
+    delete_file_from_config()
+else:
+    execute = read_config_file()
+>>>>>>> 88ce22817b09898af1913aa5dc8bf7d05b6dc1cc
 
     
 
