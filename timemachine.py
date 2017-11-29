@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 
 
 parser = argparse.ArgumentParser(description="Create copies of specified files and watch for changes ")
-parser.add_argument('-a' ,'--add', default='', action="store_true",
+parser.add_argument('-a' ,'--add', default=None, action="store_true",
                     help='Add a file to the list of files to be observed')
 
 parser.add_argument('-r' , '--remove',default=None,action="store_true",
@@ -141,9 +141,10 @@ def list_all_files():
 #Add a file to config.dat
 def add_file_to_config(filename):
     print('adding file to list of observable files')
+    
     try:
         with open(config, 'w') as f:
-            new_file = yaml.dump(filename,f,default_flow_style=False)
+            new_file = yaml.dump(filename,f.files,default_flow_style=False)
             print(file+ "has been added to the list of observable files")
     except FileNotFoundError:
         print("Specified file {0} not found".format(filename), file=sys.stderr)
