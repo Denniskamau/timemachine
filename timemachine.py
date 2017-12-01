@@ -2,6 +2,7 @@ import yaml
 import argparse
 import logging
 import subprocess
+import os
 
 
 from logging.handlers import RotatingFileHandler
@@ -18,7 +19,7 @@ parser.add_argument('-l','--list', action="store_true",
                     help='Print a list of the file being observed')
 
 
-config = './config.dat'
+config = '/home/dennis/Desktop/dante/config.dat'
 copies = './copiesDir'
 log = './logfile.log'
 rotating_handler = RotatingFileHandler(log,
@@ -112,12 +113,33 @@ def copy_files():
    
 
 def check_for_change():
-    with open (config,'r') as f:
+    os.chdir(copies)#change directory to copiesDir
+    suffix = '.txt' 
+    fnames = os.listdir('.') #looks for all files
+
+    files =[] #an empty array to hold the names of the copy files
+    for fname in fnames:
+        if fname.endswith(suffix):
+            pname= os.path.abspath(fname)
+            files.append(pname) #add the files to our array
+
+    for i in files:
+        compare(i)
+
+   
+   
+
+         
+def compare(filename):
+    with open (config, 'r') as f:
         file = yaml.load(f)
-        
-    with open('./copiesDir/data.txt', 'w') as c:
-        file2 = yaml.load(c)
-        print(file2)
+        for i in file:
+            for data in file[i]:
+                originalfile = data
+                comparison = subprocess.call(['diff','-c', originalfile ,filename])
+                logger.debug(comparison)
+                print (comparison)
+               
 
 
 # Check for all the files in config.dat
@@ -146,23 +168,12 @@ def add_file_to_config(filename):
 
 #Delete a file from config.dat
 def delete_file_from_config():
-     print('removing file from list of observable files')
+
+    
+    print('removing file from list of observable files')
     
 
 
-
-
-        
-        
-
-        
-
-    
-   
-                
-            
-
-       
         
 
 def main():
@@ -174,8 +185,8 @@ def main():
     elif args.remove:
         delete_file_from_config()
     else:
-        #execute = read_config_file_and_copy()
-        execute=copy_files()
+        execute = check_for_change()
+        #execute=copy_files()
 
 
     
