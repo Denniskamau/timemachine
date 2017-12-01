@@ -9,10 +9,10 @@ from logging.handlers import RotatingFileHandler
 
 
 parser = argparse.ArgumentParser(description="Create copies of specified files and watch for changes ")
-parser.add_argument('-a' ,'--add', default=None, action="store_true",
+parser.add_argument('-a' ,'--add',  action="store", default='',
                     help='Add a file to the list of files to be observed')
 
-parser.add_argument('-r' , '--remove',default=None,action="store_true",
+parser.add_argument('-r' , '--remove',action="store",default='',
                     help='Remove a file from the list of files to be observed')
 
 parser.add_argument('-l','--list', action="store_true",
@@ -106,7 +106,7 @@ def copy_files():
             logger.debug('FIles not found')
             print("Specified file {0} not found".format(filename), file=sys.stderr)
 
-    
+    check_for_change()
 """
 -A function to watch for changes in the original file and compare them to the copies created.
 """
@@ -135,17 +135,17 @@ def compare(filename):
         file = yaml.load(f)
         for i in file:
             for data in file[i]:
-                originalfile = data
-                comparison = subprocess.call(['diff','-c', originalfile ,filename])
-                logger.debug(comparison)
-                print (comparison)
-               
+                logger.debug('Running comparison of files')
+                comparison = subprocess.call(['diff','-c', data ,filename])
+
+
 
 
 # Check for all the files in config.dat
 def list_all_files():
     print('checking for files')
     try:
+        logger.debug('listing all files in config file')
         with open(config, 'r') as f:
             files = yaml.load(f)
             print (files)
@@ -155,22 +155,31 @@ def list_all_files():
 
 #Add a file to config.dat
 def add_file_to_config(filename):
-    print('adding file to list of observable files')
     
-    try:
-        with open(config, 'w') as f:
-            new_file = yaml.dump(filename,f.files,default_flow_style=False)
-            print(file+ "has been added to the list of observable files")
-    except FileNotFoundError:
-        print("Specified file {0} not found".format(filename), file=sys.stderr)
-        sys.exit(1)
+    print('adding file to list of observable files')
+    pname= os.path.abspath(filename)
+    with open (config,'a') as f:
+        logger.debug('adding '+pname +' to config file')
+        file = yaml.dump(pname, f)
+        
 
 
 #Delete a file from config.dat
-def delete_file_from_config():
-
-    
+def delete_file_from_config(filename):
     print('removing file from list of observable files')
+    pname=os.path.abspath(filename)
+    with open (config, 'r') as f:
+        file = yaml.load(f)
+        for i in file:
+            for data in file[i]:
+                try:
+                    logger.debug('deleting '+pname+ ' from config file')
+                    subprocess.call(['rm','-rf', pname])
+                except FileNotFoundError: 
+                    print('file not found!!')              
+
+
+       
     
 
 
@@ -181,12 +190,11 @@ def main():
     if args.list:
         list_all_files()
     elif args.add:
-        add_file_to_config()
+        add_file_to_config(args.add)
     elif args.remove:
-        delete_file_from_config()
+        delete_file_from_config(args.remove)
     else:
-        execute = check_for_change()
-        #execute=copy_files()
+        execute=copy_files()
 
 
     
