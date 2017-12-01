@@ -1,20 +1,9 @@
 Config location is ./config.dat
 Copies location is /copiesDir/data.txt
-Reading data from ./config.dat
-Writting data to ./copiesDir/data.txt
+copying files from ./config.datto ./copiesDir
 Config location is ./config.dat
 Copies location is /copiesDir/data.txt
-Reading data from ./config.dat
-Writting data to ./copiesDir/data.txt
+copying files from ./config.dat to ./copiesDir
 Config location is ./config.dat
 Copies location is /copiesDir/data.txt
-Reading data from ./config.dat
-Writting data to ./copiesDir/data.txt
-Config location is ./config.dat
-Copies location is /copiesDir/data.txt
-Reading data from ./config.dat
-Writting data to ./copiesDir/data.txt
-Config location is ./config.dat
-Copies location is /copiesDir/data.txt
-Reading data from ./config.dat
-Writting data to ./copiesDir/data.txt
+copying files from ./config.dat to ./copiesDir

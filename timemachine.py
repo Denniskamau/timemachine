@@ -1,6 +1,8 @@
 import yaml
 import argparse
 import logging
+import subprocess
+
 
 from logging.handlers import RotatingFileHandler
 
@@ -17,6 +19,7 @@ parser.add_argument('-l','--list', action="store_true",
 
 
 config = './config.dat'
+copies = './copiesDir'
 log = './logfile.log'
 rotating_handler = RotatingFileHandler(log,
 				    maxBytes=10000000,
@@ -35,11 +38,12 @@ default location will be in the copies Directory
 
 -Copies the content of the file given in the config.dat to a file in the copies Directory
 """
-def read_config_file():
+def copy_files():
     config_Location = input('Please input the location of the config file to read from? ')
 
     if config_Location == '':
         logger.debug('Config location is ./config.dat')
+
     else:
         logger.debug('Config location is '+ config_Location)
 
@@ -50,69 +54,58 @@ def read_config_file():
     else:
         logger.debug('Copies location is '+ copies_Location)
 
-    if config_Location != '':
+    
+    #Check the location before starting to copy files
+    if config_Location == '' and copies_Location == '':
         try:
-            logger.debug('Reading data from '+ config_Location)
-            with open (config_Location,'r') as f:
-                file= yaml.load(f)
-                print (file)
+            logger.debug('copying files from '+config +' to ' +copies)
+            with open(config,'r') as f:
+                file = yaml.load(f)
                 for i in file:
-                    if copies_Location == '':
-                        logger.debug('Writting data to ./copiesDir/data.txt')
-                        with open('./copiesDir/data.txt', 'w') as c:
-                            for data in file[i]:
-
-                                with open (data,'r') as x:
-                                    value = yaml.load(x)
-                                    print(value)
-
-                                    dump = yaml.dump(value , c , default_flow_style=False)
-                    else:
-                        logger.debug('Writting data to '+ copies_Location)
-                        with open(copies_Location, 'w') as c:
-                            for data in file[i]:
-
-                                with open (data,'r') as x:
-                                    value = yaml.load(x)
-                                    print(value)
-
-                                    dump = yaml.dump(value , c , default_flow_style=False)
-
+                    for data in file[i]:
+                        subprocess.call(['cp','-r',data,copies])
         except FileNotFoundError:
-            logger.debug('specified file location was incorrect')
-            print('There was a problem loading config file, It appears the path specified is not correct!!')
-    else:
+            logger.debug('Files not found')
+            print("Specified file {0} not found".format(filename), file=sys.stderr)
+            sys.exit(1)
+
+    elif config_Location != '' and copies_Location != '':
         try:
-            logger.debug('Reading data from '+ config)
-            with open (config,'r') as f:
-                file= yaml.load(f)
-                print (file)
+            logger.debug('copying files from '+ config_Location +' to'+ copies_Location)
+            with open(config_Location,'r') as f:
+                file = yaml.load(f)
                 for i in file:
-                    if copies_Location == '':
-                        logger.debug('Writting data to ./copiesDir/data.txt')
-                        with open('./copiesDir/data.txt', 'w') as c:
-                            for data in file[i]:
-
-                                with open (data,'r') as x:
-                                    value = yaml.load(x)
-                                    print(value)
-
-                                    dump = yaml.dump(value , c , default_flow_style=False)
-                    else:
-                        logger.debug('Writting data to '+ copies_Location)
-                        with open(copies_Location, 'w') as c:
-                            for data in file[i]:
-
-                                with open (data,'r') as x:
-                                    value = yaml.load(x)
-                                    print(value)
-
-                                    dump = yaml.dump(value , c , default_flow_style=False)      
+                    for data in file[i]:
+                        subprocess.call(['cp','-r',data,copies_Location])
         except FileNotFoundError:
-            logger.debug('specified file location was incorrect')
-            print('There was a problem loading config file, It appears the path specified is not correct!!')
+            logger.debug('file not found')
+            print("Specified file {0} not found".format(filename), file=sys.stderr)
 
+    elif config_Location == '' and copies_Location != '':
+        try:
+            logger.debug('copying files from '+config +' to '+ copies_Location)
+            with open(config,'r') as f:
+                file = yaml.load(f)
+                for i in file:
+                    for data in file[i]:
+                        subprocess.call(['cp','-r',data,copies_Location])
+        except FileNotFoundError:
+            logger.debug('FIle not found')
+            print("Specified file {0} not found".format(filename), file=sys.stderr)
 
+    elif config_Location != '' and copies_Location == '':
+        try:
+            logger.debug('copying files from '+config_Location + ' to ' + copies)
+            with open(config_Location,'r') as f:
+                file = yaml.load(f)
+                for i in file:
+                    for data in file[i]:
+                        subprocess.call(['cp','-r',data,copies])
+        except FileNotFoundError:
+            logger.debug('FIles not found')
+            print("Specified file {0} not found".format(filename), file=sys.stderr)
+
+    
 """
 -A function to watch for changes in the original file and compare them to the copies created.
 """
@@ -158,6 +151,20 @@ def delete_file_from_config():
 
 
 
+
+        
+        
+
+        
+
+    
+   
+                
+            
+
+       
+        
+
 def main():
     args =parser.parse_args() 
     if args.list:
@@ -167,7 +174,9 @@ def main():
     elif args.remove:
         delete_file_from_config()
     else:
-        execute = read_config_file()
+        #execute = read_config_file_and_copy()
+        execute=copy_files()
+
 
     
 
