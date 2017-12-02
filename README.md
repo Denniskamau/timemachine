@@ -3,6 +3,7 @@
 ##  Setting up
 
 -change the default location for both the config.dat file under the variable config in the script.
+
 -change the path in the config.dat file
 
 ## Handling cron
