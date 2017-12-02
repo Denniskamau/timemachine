@@ -1,0 +1,75 @@
+Rough Design
+--------------------------------------------------------------------------------------
+
+-User must be able to specify a file in the config.dat file and the system should be able to take a copy of that file.
+-Read the config.dat to get the file 
+for each file in the config.dat:
+	create a copy of the file
+	Check every minute for changes in the file
+
+-Check for change in the files
+	open the original file for reading and the copy file for reading
+	for each file:
+		compare the difference between the two
+
+-Give the user the option to give both the config location and the location to copy the file
+	-Use input and store the value of the input into a variable
+		config_location=input()
+		copy_location=input()
+
+-Have command line arguments to add,remove and list the available files to be observed.
+
+Design Decision
+------------------------------------------------------------------------------------------
+
+-function to read the config.dat file
+config file option.
+   -Use yaml to load the file into an array which can be looped over to get to a specific document
+  option -Dictionary of list
+	{['/home/dan/Desktop/testfile1.txt',/home/dan/Desktop/testfile2.txt]}
+def read_config();
+	use system.call() and cp buid in unix methos to copy the file
+
+compare the file to see the changes
+	use the diff inbuilt unix command in context mode 
+		use subprocess.call([]) method to pass in the diff command
+		this will print out the changes that have been made between the two files
+		also print out the modification time and day of the files
+
+use argparser liblary to create command line arguments
+	use store option in the argparser initialization to hold the value being passed by the user as the filename
+	for every argument passed call a method that does the task required
+	def list_files()
+		open the config file for resding using yaml.load
+		this will create a python dictionary with the files that are in the config
+		print out the dictionary to the user to view the files being watched
+	
+	def add_file()
+		use os.path to get the absolute path of the file to be added
+		use yaml.dump method to append the absolute path name to the config file
+
+	def delete_file()
+		use os.path to get the absolute path of the file to be removed
+		open the config file for reading 
+		call the subprocess method and pass in rm -rf <absolute path> to remove the file from the config file
+
+
+
+Failure Mode
+--------------------------------------------------------------------------------------------
+
+Testing
+---------------------------------------------------------------------------------------------
+call python3  timemachine from the terminal to run the program
+call python3 timemachine -h to view the arguments that can be passed in the program
+
+change the value of the config in the script and key in the default path that will be used in case the user does not provide the path to config file
+
+All the logs will be written in the logfile.log document 
+
+
+Assumption
+
+-The format of the file is .txt
+-The changes are to be viewd from the terminal
+-Only absolute path to file name will be used
