@@ -1,5 +1,5 @@
 # TimeMachine
-A python program that helps in tracking the changes made to a file
+A python program that helps in tracking the changes made to a file by making use of cron job
 
 ##  Setting up
 
@@ -8,6 +8,7 @@ A python program that helps in tracking the changes made to a file
 ## Handling cron
 
 -To schedule the task carry out the following command :
+
 		-Give the absolute path for python: /usr/bin/python3  
  
 		-Give the abolute path for the python program: /home/dan/Desktop/dante/timemachine.py 
