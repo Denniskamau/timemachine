@@ -1,8 +1,9 @@
 # TimeMachine
+A python program that helps in tracking the changes made to a file
 
 ##  Setting up
 
--change the default location for both the config.dat file under the variable config in the script.
+- change the default location for both the config.dat file under the variable config in the script.
 
 ## Handling cron
 
